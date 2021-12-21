@@ -27,7 +27,7 @@ class Recipe(BaseModel):
 
 
 class Ingredient(models.Model):
-    unit_types = [
+    UNIT_TYPES = [
         ("teaspoon", _("Colher de Chá")),
         ("tablespoon", _("Colher de Sopa")),
         ("cup", _("Xícara")),
@@ -41,7 +41,7 @@ class Ingredient(models.Model):
         ("meter", _("m")),
         ("to_taste", _("A gosto")),
     ]
-    categories = [
+    CATEGORIES = [
         ("Eggs, milk and milk products", _("Ovos, leites e derivados de leite")),
         ("Fats and oils", _("Gorduras e óleos")),
         ("Fruits", _("Frutas")),
@@ -52,14 +52,16 @@ class Ingredient(models.Model):
         ("Vegetables", _("Legumes")),
         ("Others", _("Outros")),
     ]
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     recipe = models.ForeignKey(Recipe, on_delete=models.SET_NULL, related_name="ingredients", null=True)
     quantity = models.FloatField(null=True)
-    unit_type = models.CharField(choices=unit_types, max_length=255)
+    unit_type = models.CharField(choices=UNIT_TYPES, max_length=255)
     name = models.CharField(max_length=255)
-    category = models.CharField(choices=categories, null=True, max_length=255)
+    category = models.CharField(choices=CATEGORIES, null=True, max_length=255)
 
 
 class Step(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     recipe = models.ForeignKey(Recipe, on_delete=models.SET_NULL, related_name="steps", null=True)
     step = models.IntegerField()
     description = models.TextField(blank=True, max_length=1024)
